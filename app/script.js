@@ -9,8 +9,10 @@ const dice = document.querySelector('.dice');
 
 const btnHold = document.querySelector('.btn--hold');
 
+// State Variables
 let playerOneTotalScore = 0;
 let playerTwoTotalScore = 0;
+let currentScore = 0;
 
 // const activePlayer = document.querySelector('.player--active');
 
@@ -40,11 +42,20 @@ const showDice = function (roll) {
   dice.setAttribute('src', `PNGs/dice-${roll}.png`);
 };
 
-const switchPlayers = function (activePlayerEl, currentScoreEl) {
+const switchPlayers = function (activePlayerEl) {
   const inactivePlayerEl = getInactivePlayer();
-  currentScoreEl.textContent = 0;
   deactivatePlayer(activePlayerEl);
   activePlayer(inactivePlayerEl);
+};
+
+const resetCurrentScore = function (currentScoreEl) {
+  currentScore = 0;
+  currentScoreEl.textContent = currentScore;
+};
+
+const calcShowCurrentScore = function (currentScoreEl, currentRoll) {
+  currentScore += currentRoll;
+  currentScoreEl.textContent = currentScore;
 };
 
 btnRoll.addEventListener('click', function (event) {
@@ -55,11 +66,27 @@ btnRoll.addEventListener('click', function (event) {
   showDice(currentRoll);
 
   if (currentRoll === badDice) {
-    switchPlayers(activePlayerEl, currentScoreEl);
+    switchPlayers(activePlayerEl);
+    resetCurrentScore(currentScoreEl);
     return;
   }
 
-  currentScoreEl.textContent = Number(currentScoreEl.textContent) + currentRoll;
+  calcShowCurrentScore(currentScoreEl, currentRoll);
 });
 
-// btnHold.addEventListener('click', function (event) {})
+btnHold.addEventListener('click', function (event) {
+  const activePlayerEl = document.querySelector('.player--active');
+  const activePlayerTotalScoreEl = activePlayerEl.querySelector('.score');
+  const currentScoreEl = activePlayerEl.querySelector('.current-score');
+
+  if (activePlayerEl.classList.contains('player--0')) {
+    playerOneTotalScore += currentScore;
+    activePlayerTotalScoreEl.textContent = playerOneTotalScore;
+  } else {
+    playerTwoTotalScore += currentScore;
+    activePlayerTotalScoreEl.textContent = playerTwoTotalScore;
+  }
+
+  resetCurrentScore(currentScoreEl);
+  switchPlayers(activePlayerEl);
+});
