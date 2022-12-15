@@ -120,7 +120,3 @@ btnNewGame.addEventListener('click', function (event) {
   clearAllScores(playerEls);
   activatePlayerOne(playerEls);
 });
-
-// CODE THE GAME WITH PLAYER-0 AND PLAYER-1 AS CONSTANTS,
-// INSTEAD OF PLAYING WITH "PLAYER--ACTIVE" CLASS. IT's REPETITIVE.
-// USE BODY CLICK EVENT HANDLER, not each button event handler ?
