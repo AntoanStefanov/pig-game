@@ -106,3 +106,6 @@ btnNewGame.addEventListener('click', function (event) {
   playersEls[0].classList.add('player--active');
   playersEls[1].classList.remove('player--active');
 });
+
+// CODE THE GAME WITH PLAYER-0 AND PLAYER-1 AS CONSTANTS,
+// INSTEAD OF PLAYING WITH "PLAYER--ACTIVE" CLASS. IT's REPETITIVE.
