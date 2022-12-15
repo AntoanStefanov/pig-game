@@ -12,10 +12,10 @@ const dice = document.querySelector('.dice');
 // State Variables
 const playerOne = 0;
 const playerTwo = 1;
+let activePlayer = playerOne;
 let playerOneTotalScore = 0;
 let playerTwoTotalScore = 0;
 let currentScore = 0;
-let activePlayer = playerOne;
 
 // Returns a random integer between min (inclusive) and max (inclusive).
 const diceRoll = function (min, max) {
@@ -50,9 +50,22 @@ const calcTotalPlayerOne = function (activePlayerTotalScoreEl) {
   playerOneTotalScore += currentScore;
   activePlayerTotalScoreEl.textContent = playerOneTotalScore;
 };
+
 const calcTotalPlayerTwo = function (activePlayerTotalScoreEl) {
   playerTwoTotalScore += currentScore;
   activePlayerTotalScoreEl.textContent = playerTwoTotalScore;
+};
+
+const clearAllScores = function (playersEls) {
+  for (const player of playersEls) {
+    player.querySelector('.score').textContent = currentScore;
+    player.querySelector('.current-score').textContent = playerOneTotalScore;
+  }
+};
+
+const activatePlayerOne = function (playerEls) {
+  playerEls[playerOne].classList.add('player--active');
+  playerEls[playerTwo].classList.remove('player--active');
 };
 
 btnRoll.addEventListener('click', function (event) {
@@ -98,18 +111,14 @@ btnHold.addEventListener('click', function (event) {
 });
 
 btnNewGame.addEventListener('click', function (event) {
+  const playerEls = document.querySelectorAll('.player');
+
   currentScore = 0;
   playerOneTotalScore = 0;
   playerTwoTotalScore = 0;
 
-  const playersEls = document.querySelectorAll('.player');
-  for (const player of playersEls) {
-    player.querySelector('.score').textContent = currentScore;
-    player.querySelector('.current-score').textContent = playerOneTotalScore;
-  }
-
-  playersEls[playerOne].classList.add('player--active');
-  playersEls[playerTwo].classList.remove('player--active');
+  clearAllScores(playerEls);
+  activatePlayerOne(playerEls);
 });
 
 // CODE THE GAME WITH PLAYER-0 AND PLAYER-1 AS CONSTANTS,
