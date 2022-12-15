@@ -7,6 +7,8 @@ const badDice = 1;
 const btnRoll = document.querySelector('.btn--roll');
 const dice = document.querySelector('.dice');
 
+const btnHold = document.querySelector('.btn--hold');
+
 let playerOneTotalScore = 0;
 let playerTwoTotalScore = 0;
 
@@ -38,6 +40,13 @@ const showDice = function (roll) {
   dice.setAttribute('src', `PNGs/dice-${roll}.png`);
 };
 
+const switchPlayers = function (activePlayerEl, currentScoreEl) {
+  const inactivePlayerEl = getInactivePlayer();
+  currentScoreEl.textContent = 0;
+  deactivatePlayer(activePlayerEl);
+  activePlayer(inactivePlayerEl);
+};
+
 btnRoll.addEventListener('click', function (event) {
   const activePlayerEl = document.querySelector('.player--active');
   const currentScoreEl = activePlayerEl.querySelector('.current-score');
@@ -46,12 +55,11 @@ btnRoll.addEventListener('click', function (event) {
   showDice(currentRoll);
 
   if (currentRoll === badDice) {
-    const inactivePlayerEl = getInactivePlayer();
-    currentScoreEl.textContent = 0;
-    deactivatePlayer(activePlayerEl);
-    activePlayer(inactivePlayerEl);
+    switchPlayers(activePlayerEl, currentScoreEl);
     return;
   }
 
   currentScoreEl.textContent = Number(currentScoreEl.textContent) + currentRoll;
 });
+
+// btnHold.addEventListener('click', function (event) {})
