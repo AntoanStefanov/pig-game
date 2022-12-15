@@ -8,6 +8,7 @@ const btnRoll = document.querySelector('.btn--roll');
 const dice = document.querySelector('.dice');
 
 const btnHold = document.querySelector('.btn--hold');
+const btnNewGame = document.querySelector('.btn--new');
 
 // State Variables
 let playerOneTotalScore = 0;
@@ -89,4 +90,19 @@ btnHold.addEventListener('click', function (event) {
 
   resetCurrentScore(currentScoreEl);
   switchPlayers(activePlayerEl);
+});
+
+btnNewGame.addEventListener('click', function (event) {
+  currentScore = 0;
+  playerOneTotalScore = 0;
+  playerTwoTotalScore = 0;
+
+  const playersEls = document.querySelectorAll('.player');
+  for (const player of playersEls) {
+    player.querySelector('.score').textContent = currentScore;
+    player.querySelector('.current-score').textContent = playerOneTotalScore;
+  }
+
+  playersEls[0].classList.add('player--active');
+  playersEls[1].classList.remove('player--active');
 });
