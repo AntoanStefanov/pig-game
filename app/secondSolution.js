@@ -8,6 +8,7 @@ const btnNewGame = document.querySelector('.btn--new');
 const btnRoll = document.querySelector('.btn--roll');
 const btnHold = document.querySelector('.btn--hold');
 const dice = document.querySelector('.dice');
+dice.style.display = 'none';
 
 // State Variables
 const playerOne = 0;
@@ -23,6 +24,7 @@ const diceRoll = function (min, max) {
 };
 
 const showDice = function (roll) {
+  if (dice.style.display === 'none') dice.style.display = 'block';
   dice.setAttribute('src', `PNGs/dice-${roll}.png`);
 };
 
@@ -119,4 +121,5 @@ btnNewGame.addEventListener('click', function (event) {
 
   clearAllScores(playerEls);
   activatePlayerOne(playerEls);
+  dice.style.display = 'none';
 });
