@@ -17,6 +17,23 @@ const diceRoll = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+const getInactivePlayer = function () {
+  const playersEls = document.querySelectorAll('.player');
+  for (const player of playersEls) {
+    if (!player.classList.contains('player--active')) {
+      return player;
+    }
+  }
+};
+
+const activePlayer = function (inactivePlayerEl) {
+  inactivePlayerEl.classList.add('player--active');
+};
+
+const deactivatePlayer = function (activePlayerEl) {
+  activePlayerEl.classList.remove('player--active');
+};
+
 const showDice = function (roll) {
   dice.setAttribute('src', `PNGs/dice-${roll}.png`);
 };
@@ -25,17 +42,16 @@ btnRoll.addEventListener('click', function (event) {
   const activePlayerEl = document.querySelector('.player--active');
   const currentScoreEl = activePlayerEl.querySelector('.current-score');
   const currentRoll = diceRoll(minDice, maxDice);
-  console.log(activePlayerEl);
-  console.log(currentScoreEl);
-  console.log(currentRoll);
 
   showDice(currentRoll);
 
-  const inactivePlayerEl = document.querySelectorAll('.player');
-  console.log(inactivePlayerEl);
   if (currentRoll === badDice) {
+    const inactivePlayerEl = getInactivePlayer();
+    currentScoreEl.textContent = 0;
+    deactivatePlayer(activePlayerEl);
+    activePlayer(inactivePlayerEl);
+    return;
   }
 
-  const currentScore = Number(currentScoreEl.textContent) + currentRoll;
-  currentScoreEl.textContent = currentScore;
+  currentScoreEl.textContent = Number(currentScoreEl.textContent) + currentRoll;
 });
