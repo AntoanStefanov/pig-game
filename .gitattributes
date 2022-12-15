@@ -1,0 +1,6 @@
+# https://eslint.org/docs/latest/rules/linebreak-style
+*.js text eol=lf
+*.gitattributes text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.eslintrc.* text eol=lf
