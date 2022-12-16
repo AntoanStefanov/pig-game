@@ -18,8 +18,8 @@ const dice = document.querySelector('.dice');
 
 // State Variables
 let activePlayerEl = playerOneEl;
-let playerOneTotalScore = 90;
-let playerTwoTotalScore = 98;
+let playerOneTotalScore = 0;
+let playerTwoTotalScore = 0;
 let currentScore = 0;
 
 const diceRoll = function (min, max) {
