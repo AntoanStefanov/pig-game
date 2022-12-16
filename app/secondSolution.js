@@ -145,9 +145,7 @@ btnNewGame.addEventListener('click', function (event) {
   playerOneTotalScore = 0;
   playerTwoTotalScore = 0;
 
-  if (isThereWinner()) {
-    hideWinner();
-  }
+  if (isThereWinner()) hideWinner();
 
   activatePlayerOne();
   clearAllScores();
