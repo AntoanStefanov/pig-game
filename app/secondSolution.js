@@ -4,6 +4,8 @@ const minDice = 1;
 const maxDice = 6;
 const badDice = 1;
 
+const totalScoreForWin = 100;
+
 const playerEls = document.querySelectorAll('.player');
 const playerOneEl = document.querySelector('.player--0');
 const playerTwoEl = document.querySelector('.player--1');
@@ -16,8 +18,8 @@ const dice = document.querySelector('.dice');
 
 // State Variables
 let activePlayerEl = playerOneEl;
-let playerOneTotalScore = 0;
-let playerTwoTotalScore = 0;
+let playerOneTotalScore = 90;
+let playerTwoTotalScore = 98;
 let currentScore = 0;
 
 const diceRoll = function (min, max) {
@@ -33,14 +35,17 @@ const showDice = function (roll) {
   dice.setAttribute('src', `PNGs/dice-${roll}.png`);
 };
 
+const getElOnActivePlayer = (className) =>
+  activePlayerEl.querySelector(`.${className}`);
+
 const resetCurrentScore = function () {
   currentScore = 0;
-  activePlayerEl.querySelector('.current-score').textContent = currentScore;
+  getElOnActivePlayer('current-score').textContent = currentScore;
 };
 
-const calcShowCurrentScore = function (currentScoreEl, currentRoll) {
+const calcShowCurrentScore = function (currentRoll) {
   currentScore += currentRoll;
-  currentScoreEl.textContent = currentScore;
+  getElOnActivePlayer('current-score').textContent = currentScore;
 };
 
 const activatePlayerOne = function () {
@@ -55,14 +60,22 @@ const activatePlayerTwo = function () {
   playerOneEl.classList.remove('player--active');
 };
 
+const winCheck = (totalScore) => totalScore >= totalScoreForWin;
+
+const displayWinner = () => {
+  activePlayerEl.classList.add('player--winner', 'name');
+  btnRoll.disabled = true;
+  btnHold.disabled = true;
+};
+
 const calcTotalPlayerOne = function () {
   playerOneTotalScore += currentScore;
-  activePlayerEl.querySelector('.score').textContent = playerOneTotalScore;
+  return playerOneTotalScore;
 };
 
 const calcTotalPlayerTwo = function () {
   playerTwoTotalScore += currentScore;
-  activePlayerEl.querySelector('.score').textContent = playerTwoTotalScore;
+  return playerTwoTotalScore;
 };
 
 const clearAllScores = function () {
@@ -72,31 +85,41 @@ const clearAllScores = function () {
   }
 };
 
-btnRoll.addEventListener('click', function (event) {
-  const currentScoreEl = activePlayerEl.querySelector('.current-score');
-  const currentRoll = diceRoll(minDice, maxDice);
+const activePlayerOnHold = function () {
+  let currentTotalScore;
 
-  showDice(currentRoll);
-
-  if (currentRoll === badDice) {
-    resetCurrentScore(currentScoreEl);
-    activePlayerEl === playerOneEl ? activatePlayerTwo() : activatePlayerOne();
-    return;
+  if (activePlayerEl === playerOneEl) {
+    currentTotalScore = calcTotalPlayerOne();
+  } else {
+    currentTotalScore = calcTotalPlayerTwo();
   }
 
-  calcShowCurrentScore(currentScoreEl, currentRoll);
+  getElOnActivePlayer('score').textContent = currentTotalScore;
+
+  if (winCheck(currentTotalScore)) {
+    displayWinner();
+    return;
+  }
+  resetCurrentScore();
+};
+
+const switchPlayers = () =>
+  activePlayerEl === playerOneEl ? activatePlayerTwo() : activatePlayerOne();
+
+btnRoll.addEventListener('click', function (event) {
+  const currentRoll = diceRoll(minDice, maxDice);
+  showDice(currentRoll);
+  if (currentRoll === badDice) {
+    resetCurrentScore();
+    switchPlayers();
+    return;
+  }
+  calcShowCurrentScore(currentRoll);
 });
 
 btnHold.addEventListener('click', function (event) {
-  if (activePlayerEl === playerOneEl) {
-    calcTotalPlayerOne();
-    resetCurrentScore();
-    activatePlayerTwo();
-  } else {
-    calcTotalPlayerTwo();
-    resetCurrentScore();
-    activatePlayerOne();
-  }
+  activePlayerOnHold();
+  switchPlayers();
 });
 
 btnNewGame.addEventListener('click', function (event) {
@@ -104,7 +127,11 @@ btnNewGame.addEventListener('click', function (event) {
   playerOneTotalScore = 0;
   playerTwoTotalScore = 0;
 
-  clearAllScores();
+  activePlayerEl.classList.remove('player--winner', 'name');
+  btnRoll.disabled = false;
+  btnHold.disabled = false;
+
   activatePlayerOne();
+  clearAllScores();
   hideDice();
 });
