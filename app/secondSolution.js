@@ -18,8 +18,8 @@ const dice = document.querySelector('.dice');
 
 // State Variables
 let activePlayerEl = playerOneEl;
-let playerOneTotalScore = 0;
-let playerTwoTotalScore = 0;
+let playerOneTotalScore = 98;
+let playerTwoTotalScore = 98;
 let currentScore = 0;
 
 const diceRoll = function (min, max) {
@@ -38,14 +38,20 @@ const showDice = function (roll) {
 const getElOnActivePlayer = (className) =>
   activePlayerEl.querySelector(`.${className}`);
 
+const showCurrentScore = () =>
+  (getElOnActivePlayer('current-score').textContent = currentScore);
+
+const showCurrentTotalScore = (currentTotalScore) =>
+  (getElOnActivePlayer('score').textContent = currentTotalScore);
+
 const resetCurrentScore = function () {
   currentScore = 0;
-  getElOnActivePlayer('current-score').textContent = currentScore;
+  showCurrentScore();
 };
 
-const calcShowCurrentScore = function (currentRoll) {
+const calcCurrentScore = function (currentRoll) {
   currentScore += currentRoll;
-  getElOnActivePlayer('current-score').textContent = currentScore;
+  showCurrentScore();
 };
 
 const activatePlayerOne = function () {
@@ -68,6 +74,12 @@ const displayWinner = () => {
   btnHold.disabled = true;
 };
 
+const hideWinner = () => {
+  activePlayerEl.classList.remove('player--winner', 'name');
+  btnRoll.disabled = false;
+  btnHold.disabled = false;
+};
+
 const calcTotalPlayerOne = function () {
   playerOneTotalScore += currentScore;
   return playerOneTotalScore;
@@ -85,7 +97,7 @@ const clearAllScores = function () {
   }
 };
 
-const activePlayerOnHold = function () {
+const isActivePlayerWinner = function () {
   let currentTotalScore;
 
   if (activePlayerEl === playerOneEl) {
@@ -94,12 +106,10 @@ const activePlayerOnHold = function () {
     currentTotalScore = calcTotalPlayerTwo();
   }
 
-  getElOnActivePlayer('score').textContent = currentTotalScore;
+  showCurrentTotalScore(currentTotalScore);
 
-  if (winCheck(currentTotalScore)) {
-    displayWinner();
-    return;
-  }
+  if (winCheck(currentTotalScore)) return true;
+
   resetCurrentScore();
 };
 
@@ -108,17 +118,23 @@ const switchPlayers = () =>
 
 btnRoll.addEventListener('click', function (event) {
   const currentRoll = diceRoll(minDice, maxDice);
+
   showDice(currentRoll);
+
   if (currentRoll === badDice) {
     resetCurrentScore();
     switchPlayers();
     return;
   }
-  calcShowCurrentScore(currentRoll);
+
+  calcCurrentScore(currentRoll);
 });
 
 btnHold.addEventListener('click', function (event) {
-  activePlayerOnHold();
+  if (isActivePlayerWinner()) {
+    displayWinner();
+    return;
+  }
   switchPlayers();
 });
 
@@ -127,9 +143,7 @@ btnNewGame.addEventListener('click', function (event) {
   playerOneTotalScore = 0;
   playerTwoTotalScore = 0;
 
-  activePlayerEl.classList.remove('player--winner', 'name');
-  btnRoll.disabled = false;
-  btnHold.disabled = false;
+  hideWinner();
 
   activatePlayerOne();
   clearAllScores();
