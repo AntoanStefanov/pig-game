@@ -4,11 +4,11 @@ const minDice = 1;
 const maxDice = 6;
 const badDice = 1;
 
+const playerEls = document.querySelectorAll('.player');
 const btnNewGame = document.querySelector('.btn--new');
 const btnRoll = document.querySelector('.btn--roll');
 const btnHold = document.querySelector('.btn--hold');
 const dice = document.querySelector('.dice');
-dice.style.display = 'none';
 
 const playerOne = 0;
 const playerTwo = 1;
@@ -21,6 +21,10 @@ let currentScore = 0;
 // Returns a random integer between min (inclusive) and max (inclusive).
 const diceRoll = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+const hideDice = () => {
+  dice.style.display = 'none';
 };
 
 const showDice = function (roll) {
@@ -60,14 +64,14 @@ const calcTotalPlayerTwo = function (activePlayerTotalScoreEl) {
   activePlayerTotalScoreEl.textContent = playerTwoTotalScore;
 };
 
-const clearAllScores = function (playersEls) {
-  for (const player of playersEls) {
+const clearAllScores = function () {
+  for (const player of playerEls) {
     player.querySelector('.score').textContent = currentScore;
     player.querySelector('.current-score').textContent = playerOneTotalScore;
   }
 };
 
-const activatePlayerOneOnReset = function (playerEls) {
+const activatePlayerOneOnReset = function () {
   playerEls[playerOne].classList.add('player--active');
   playerEls[playerTwo].classList.remove('player--active');
   activePlayer = playerOne;
@@ -81,12 +85,7 @@ btnRoll.addEventListener('click', function (event) {
   showDice(currentRoll);
 
   if (currentRoll === badDice) {
-    if (activePlayer === playerOne) {
-      activatePlayerTwo();
-    } else {
-      activatePlayerOne();
-    }
-
+    activePlayer === playerOne ? activatePlayerTwo() : activatePlayerOne();
     resetCurrentScore(currentScoreEl);
     return;
   }
@@ -112,13 +111,11 @@ btnHold.addEventListener('click', function (event) {
 });
 
 btnNewGame.addEventListener('click', function (event) {
-  const playerEls = document.querySelectorAll('.player');
-
   currentScore = 0;
   playerOneTotalScore = 0;
   playerTwoTotalScore = 0;
 
-  clearAllScores(playerEls);
-  activatePlayerOneOnReset(playerEls);
-  dice.style.display = 'none';
+  clearAllScores();
+  activatePlayerOneOnReset();
+  hideDice();
 });
