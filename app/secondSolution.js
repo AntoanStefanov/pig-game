@@ -5,20 +5,21 @@ const maxDice = 6;
 const badDice = 1;
 
 const playerEls = document.querySelectorAll('.player');
+const playerOneEl = document.querySelector('.player--0');
+const playerTwoEl = document.querySelector('.player--1');
+
 const btnNewGame = document.querySelector('.btn--new');
 const btnRoll = document.querySelector('.btn--roll');
 const btnHold = document.querySelector('.btn--hold');
+
 const dice = document.querySelector('.dice');
 
-const playerOne = 0;
-const playerTwo = 1;
 // State Variables
-let activePlayer = playerOne;
+let activePlayerEl = playerOneEl;
 let playerOneTotalScore = 0;
 let playerTwoTotalScore = 0;
 let currentScore = 0;
 
-// Returns a random integer between min (inclusive) and max (inclusive).
 const diceRoll = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
@@ -32,9 +33,9 @@ const showDice = function (roll) {
   dice.setAttribute('src', `PNGs/dice-${roll}.png`);
 };
 
-const resetCurrentScore = function (currentScoreEl) {
+const resetCurrentScore = function () {
   currentScore = 0;
-  currentScoreEl.textContent = currentScore;
+  activePlayerEl.querySelector('.current-score').textContent = currentScore;
 };
 
 const calcShowCurrentScore = function (currentScoreEl, currentRoll) {
@@ -43,25 +44,25 @@ const calcShowCurrentScore = function (currentScoreEl, currentRoll) {
 };
 
 const activatePlayerOne = function () {
-  activePlayer = playerOne;
-  document.querySelector('.player--1').classList.remove('player--active');
-  document.querySelector('.player--0').classList.add('player--active');
+  activePlayerEl = playerOneEl;
+  playerOneEl.classList.add('player--active');
+  playerTwoEl.classList.remove('player--active');
 };
 
 const activatePlayerTwo = function () {
-  activePlayer = playerTwo;
-  document.querySelector('.player--0').classList.remove('player--active');
-  document.querySelector('.player--1').classList.add('player--active');
+  activePlayerEl = playerTwoEl;
+  playerTwoEl.classList.add('player--active');
+  playerOneEl.classList.remove('player--active');
 };
 
-const calcTotalPlayerOne = function (activePlayerTotalScoreEl) {
+const calcTotalPlayerOne = function () {
   playerOneTotalScore += currentScore;
-  activePlayerTotalScoreEl.textContent = playerOneTotalScore;
+  activePlayerEl.querySelector('.score').textContent = playerOneTotalScore;
 };
 
-const calcTotalPlayerTwo = function (activePlayerTotalScoreEl) {
+const calcTotalPlayerTwo = function () {
   playerTwoTotalScore += currentScore;
-  activePlayerTotalScoreEl.textContent = playerTwoTotalScore;
+  activePlayerEl.querySelector('.score').textContent = playerTwoTotalScore;
 };
 
 const clearAllScores = function () {
@@ -71,22 +72,15 @@ const clearAllScores = function () {
   }
 };
 
-const activatePlayerOneOnReset = function () {
-  playerEls[playerOne].classList.add('player--active');
-  playerEls[playerTwo].classList.remove('player--active');
-  activePlayer = playerOne;
-};
-
 btnRoll.addEventListener('click', function (event) {
-  const activePlayerEl = document.querySelector('.player--active');
   const currentScoreEl = activePlayerEl.querySelector('.current-score');
   const currentRoll = diceRoll(minDice, maxDice);
 
   showDice(currentRoll);
 
   if (currentRoll === badDice) {
-    activePlayer === playerOne ? activatePlayerTwo() : activatePlayerOne();
     resetCurrentScore(currentScoreEl);
+    activePlayerEl === playerOneEl ? activatePlayerTwo() : activatePlayerOne();
     return;
   }
 
@@ -94,20 +88,15 @@ btnRoll.addEventListener('click', function (event) {
 });
 
 btnHold.addEventListener('click', function (event) {
-  const activePlayerEl = document.querySelector('.player--active');
-
-  const activePlayerTotalScoreEl = activePlayerEl.querySelector('.score');
-  const currentScoreEl = activePlayerEl.querySelector('.current-score');
-
-  if (activePlayer === playerOne) {
+  if (activePlayerEl === playerOneEl) {
+    calcTotalPlayerOne();
+    resetCurrentScore();
     activatePlayerTwo();
-    calcTotalPlayerOne(activePlayerTotalScoreEl);
   } else {
+    calcTotalPlayerTwo();
+    resetCurrentScore();
     activatePlayerOne();
-    calcTotalPlayerTwo(activePlayerTotalScoreEl);
   }
-
-  resetCurrentScore(currentScoreEl);
 });
 
 btnNewGame.addEventListener('click', function (event) {
@@ -116,6 +105,6 @@ btnNewGame.addEventListener('click', function (event) {
   playerTwoTotalScore = 0;
 
   clearAllScores();
-  activatePlayerOneOnReset();
+  activatePlayerOne();
   hideDice();
 });
