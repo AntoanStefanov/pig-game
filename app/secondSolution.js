@@ -10,9 +10,9 @@ const btnHold = document.querySelector('.btn--hold');
 const dice = document.querySelector('.dice');
 dice.style.display = 'none';
 
-// State Variables
 const playerOne = 0;
 const playerTwo = 1;
+// State Variables
 let activePlayer = playerOne;
 let playerOneTotalScore = 0;
 let playerTwoTotalScore = 0;
@@ -38,12 +38,12 @@ const calcShowCurrentScore = function (currentScoreEl, currentRoll) {
   currentScoreEl.textContent = currentScore;
 };
 
-const activePlayerOne = function () {
+const activatePlayerOne = function () {
   document.querySelector('.player--1').classList.remove('player--active');
   document.querySelector('.player--0').classList.add('player--active');
 };
 
-const activePlayerTwo = function () {
+const activatePlayerTwo = function () {
   document.querySelector('.player--0').classList.remove('player--active');
   document.querySelector('.player--1').classList.add('player--active');
 };
@@ -65,9 +65,10 @@ const clearAllScores = function (playersEls) {
   }
 };
 
-const activatePlayerOne = function (playerEls) {
+const activatePlayerOneOnReset = function (playerEls) {
   playerEls[playerOne].classList.add('player--active');
   playerEls[playerTwo].classList.remove('player--active');
+  activePlayer = playerOne;
 };
 
 btnRoll.addEventListener('click', function (event) {
@@ -79,11 +80,11 @@ btnRoll.addEventListener('click', function (event) {
 
   if (currentRoll === badDice) {
     if (activePlayer === playerOne) {
+      activatePlayerTwo();
       activePlayer = playerTwo;
-      activePlayerTwo();
     } else {
+      activatePlayerOne();
       activePlayer = playerOne;
-      activePlayerOne();
     }
 
     resetCurrentScore(currentScoreEl);
@@ -100,12 +101,12 @@ btnHold.addEventListener('click', function (event) {
   const currentScoreEl = activePlayerEl.querySelector('.current-score');
 
   if (activePlayer === playerOne) {
+    activatePlayerTwo();
     activePlayer = playerTwo;
-    activePlayerTwo();
     calcTotalPlayerOne(activePlayerTotalScoreEl);
   } else {
+    activatePlayerOne();
     activePlayer = playerOne;
-    activePlayerOne();
     calcTotalPlayerTwo(activePlayerTotalScoreEl);
   }
 
@@ -120,6 +121,6 @@ btnNewGame.addEventListener('click', function (event) {
   playerTwoTotalScore = 0;
 
   clearAllScores(playerEls);
-  activatePlayerOne(playerEls);
+  activatePlayerOneOnReset(playerEls);
   dice.style.display = 'none';
 });
