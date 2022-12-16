@@ -39,11 +39,13 @@ const calcShowCurrentScore = function (currentScoreEl, currentRoll) {
 };
 
 const activatePlayerOne = function () {
+  activePlayer = playerOne;
   document.querySelector('.player--1').classList.remove('player--active');
   document.querySelector('.player--0').classList.add('player--active');
 };
 
 const activatePlayerTwo = function () {
+  activePlayer = playerTwo;
   document.querySelector('.player--0').classList.remove('player--active');
   document.querySelector('.player--1').classList.add('player--active');
 };
@@ -81,10 +83,8 @@ btnRoll.addEventListener('click', function (event) {
   if (currentRoll === badDice) {
     if (activePlayer === playerOne) {
       activatePlayerTwo();
-      activePlayer = playerTwo;
     } else {
       activatePlayerOne();
-      activePlayer = playerOne;
     }
 
     resetCurrentScore(currentScoreEl);
@@ -102,11 +102,9 @@ btnHold.addEventListener('click', function (event) {
 
   if (activePlayer === playerOne) {
     activatePlayerTwo();
-    activePlayer = playerTwo;
     calcTotalPlayerOne(activePlayerTotalScoreEl);
   } else {
     activatePlayerOne();
-    activePlayer = playerOne;
     calcTotalPlayerTwo(activePlayerTotalScoreEl);
   }
 
