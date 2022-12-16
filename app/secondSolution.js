@@ -18,8 +18,8 @@ const dice = document.querySelector('.dice');
 
 // State Variables
 let activePlayerEl = playerOneEl;
-let playerOneTotalScore = 0;
-let playerTwoTotalScore = 0;
+let playerOneTotalScore = 98;
+let playerTwoTotalScore = 98;
 let currentScore = 0;
 
 const diceRoll = function (min, max) {
@@ -116,6 +116,8 @@ const isActivePlayerWinner = function () {
 const switchPlayers = () =>
   activePlayerEl === playerOneEl ? activatePlayerTwo() : activatePlayerOne();
 
+const isThereWinner = () => activePlayerEl.classList.contains('player--winner');
+
 btnRoll.addEventListener('click', function (event) {
   const currentRoll = diceRoll(minDice, maxDice);
 
@@ -143,7 +145,9 @@ btnNewGame.addEventListener('click', function (event) {
   playerOneTotalScore = 0;
   playerTwoTotalScore = 0;
 
-  hideWinner();
+  if (isThereWinner()) {
+    hideWinner();
+  }
 
   activatePlayerOne();
   clearAllScores();
