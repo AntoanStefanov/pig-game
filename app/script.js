@@ -59,7 +59,7 @@ const calcShowCurrentScore = function (currentScoreEl, currentRoll) {
   currentScoreEl.textContent = currentScore;
 };
 
-btnRoll.addEventListener('click', function (event) {
+btnRoll.addEventListener('click', function () {
   const activePlayerEl = document.querySelector('.player--active');
   const currentScoreEl = activePlayerEl.querySelector('.current-score');
   const currentRoll = diceRoll(minDice, maxDice);
@@ -75,7 +75,7 @@ btnRoll.addEventListener('click', function (event) {
   calcShowCurrentScore(currentScoreEl, currentRoll);
 });
 
-btnHold.addEventListener('click', function (event) {
+btnHold.addEventListener('click', function () {
   const activePlayerEl = document.querySelector('.player--active');
   const activePlayerTotalScoreEl = activePlayerEl.querySelector('.score');
   const currentScoreEl = activePlayerEl.querySelector('.current-score');
@@ -92,7 +92,7 @@ btnHold.addEventListener('click', function (event) {
   switchPlayers(activePlayerEl);
 });
 
-btnNewGame.addEventListener('click', function (event) {
+btnNewGame.addEventListener('click', function () {
   currentScore = 0;
   playerOneTotalScore = 0;
   playerTwoTotalScore = 0;
