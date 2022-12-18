@@ -118,7 +118,7 @@ const switchPlayers = () =>
 
 const isThereWinner = () => activePlayerEl.classList.contains('player--winner');
 
-btnRoll.addEventListener('click', function (event) {
+btnRoll.addEventListener('click', function () {
   const currentRoll = diceRoll(minDice, maxDice);
 
   showDice(currentRoll);
@@ -132,7 +132,7 @@ btnRoll.addEventListener('click', function (event) {
   calcCurrentScore(currentRoll);
 });
 
-btnHold.addEventListener('click', function (event) {
+btnHold.addEventListener('click', function () {
   if (isActivePlayerWinner()) {
     displayWinner();
     return;
@@ -140,7 +140,7 @@ btnHold.addEventListener('click', function (event) {
   switchPlayers();
 });
 
-btnNewGame.addEventListener('click', function (event) {
+btnNewGame.addEventListener('click', function () {
   currentScore = 0;
   playerOneTotalScore = 0;
   playerTwoTotalScore = 0;
