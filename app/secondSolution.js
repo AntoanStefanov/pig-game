@@ -1,10 +1,10 @@
 'use strict';
 
+const totalScoreForWin = 100;
+
 const minDice = 1;
 const maxDice = 6;
 const badDice = 1;
-
-const totalScoreForWin = 100;
 
 const playerEls = document.querySelectorAll('.player');
 const playerOneEl = document.querySelector('.player--0');
